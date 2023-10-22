@@ -12,8 +12,8 @@ tipo_token = {
 	'otos-caso-se': (8, 'else if'),
 	'ate-que': (9, 'while'),
 	'bota': (10, 'cout'),
-	'caso': (11, 'if'),
-	'faiz': (12, 'for'),
+	'caso': (11, 'caso'),
+	'faiz': (12, 'faiz'),
 	'cata': (13, 'cin'),
 	'xuxa': (14, 'return'),
 	'trem-bao': (15, 'verdadeiro'),
@@ -33,12 +33,13 @@ tipo_token = {
 	'por': (29, '/'),
     '(': (30, '('),
     ')': (31, ')'),
-	'~': (32, '~'),
+	'~': (32, 'endlinha'),
 	'<>': (33, 'atrib'),
-	'|': (34, '|'),  
+	'|': (34, 'pipe'),  
 	'literal': (35, 'literal'),
 	'end': (36, 'end'),
-	'erro': (37, 'erro')
+	'erro': (37, 'erro'),
+	' ': (38, 'espaco'), 
 }
 
 def getChar(buffer, arquivo, linha):
