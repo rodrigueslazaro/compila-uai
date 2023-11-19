@@ -1,6 +1,8 @@
 from os import path
 import sys
 
+# arquivo = open("teste.uai", "r")
+
 tipo_token = {
     'uai': (1, 'main'),
     'queijo': (2, 'inteiro'),
@@ -8,12 +10,12 @@ tipo_token = {
 	'num': (4, 'numero'),
 	'id': (5, 'id'),
     'casadinho': (6, 'bool'),
-	'otos-caso': (7, 'else'),
-	'otos-caso-se': (8, 'else if'),
+	'otos-caso': (7, 'senao'),
+	'otos-caso-se': (8, 'senaose'),
 	'ate-que': (9, 'while'),
 	'bota': (10, 'cout'),
-	'caso': (11, 'caso'),
-	'faiz': (12, 'faiz'),
+	'caso': (11, 'caso'), # representa o IF
+	'faiz': (12, 'faiz'), #repreta o for
 	'cata': (13, 'cin'),
 	'xuxa': (14, 'return'),
 	'trem-bao': (15, 'verdadeiro'),
@@ -21,16 +23,16 @@ tipo_token = {
 	'e': (17, 'e'),
     'ou': (18, 'ou'),
     'aneim': (19, 'nao'),
-    'menor-que': (20, '<'),
-    'maior-que': (21, '>'),
-    'menor-que-ou-mema-coisa': (22, '<='),
-    'maior-que-ou-mema-coisa': (23, '>='),
-    'mema-coisa': (24, '='),
-    'diferente-de': (25, '!='),
-	'mais': (26, '+'),
-	'menos': (27, '-'),
-	'veiz': (28, '*'),
-	'por': (29, '/'),
+    'menor-que': (20, 'menor-que'),
+    'maior-que': (21, 'maior-que'),
+    'menor-que-ou-mema-coisa': (22, 'menor-que-ou-mema-coisa'),
+    'maior-que-ou-mema-coisa': (23, 'maior-que-ou-mema-coisa'),
+    'mema-coisa': (24, 'mema-coisa'),
+    'diferente-de': (25, 'diferente-de'),
+	'mais': (26, 'soma'),
+	'menos': (27, 'sub'),
+	'veiz': (28, 'vezes'),
+	'por': (29, 'divisao'),
     '(': (30, '('),
     ')': (31, ')'),
 	'~': (32, 'endlinha'),
@@ -154,14 +156,17 @@ def getToken(arquivo, linha):
 				car = getChar(buffer, arquivo, linha)
 				if car == ' ':
 					return [tipo_token['<>'], lexema, linha]
-				
-with open("teste.uai", "r") as file:
-	linha = [1]
-	while(True):
-		token = getToken(file, linha)
-		if token[0] == tipo_token['end']:
-			break
-		else: 
-			for i in token:
-				print(i," ", end='')
-			print("")
+
+def main():		
+	with open("teste.uai", "r") as file:
+		linha = [1]
+		while(True):
+			token = getToken(file, linha)
+			if token[0] == tipo_token['end']:
+				break
+			else: 
+				for i in token:
+					print(i," ", end='')
+				print("")
+
+main()
