@@ -10,208 +10,228 @@ tokenAtual = None
 arquivo = None
 buffer = ''
 linha = [0]
+endDeclaracoes = False
 
 arquivo = open("teste.uai", "r")
 def abrir_lexico(nomeArquivo):
-	if path.exists(nomeArquivo):
-		arquivo = open(nomeArquivo, "r")
-		buffer = ''
-		linha = 1
-	else:
-		print('ERRO: Arquivo "%s" inexistente.' % nomeArquivo)
+    if path.exists(nomeArquivo):
+        arquivo = open(nomeArquivo, "r")
+        buffer = ''
+        linha = 1
+    else:
+        print('ERRO: Arquivo "%s" inexistente.' % nomeArquivo)
 
 
 def atualIgual(token):
-	return tokenAtual[1] == token[1]
+    return tokenAtual[0][1] == token[1]
 
 def interprete(nomeArquivo):
-	lex = abrir_lexico(nomeArquivo)
-	tokenAtual = getToken()
+    lex = abrir_lexico(nomeArquivo)
+    tokenAtual = getToken()
 
-	main()
-	consome( tt['end'] )
-	print('Atual: end')
+    main()
+    consome( tt['end'] )
+    print('Atual: end')
 
 def consome(token):
-	global tokenAtual
-	if ( token[1] == tokenAtual[0][1] ):
-		tokenAtual = getToken(arquivo, linha)
-	else:
-		print('ERRO DE SINTAXE')
-
-		# while self.tokenAtual.lexema != ';':
-		# 	self.tokenAtual = self.lex.getToken() 
-		
-		#quit()
+    global tokenAtual
+    if ( token[1] == tokenAtual[0][1] ):
+        tokenAtual = getToken(arquivo, linha)
+    else:
+        print('ERRO DE SINTAXE')
 
 def declaracoes():
-	if comentario: print('Atual: declaracoes')
-	if (var_type()):
-		consome(tt['id'])
-		consome(tt['espaco'])
-		consome(tt['endlinha'])
-		declaracoes()
-	else:
-		pass
+    if comentario: print('Atual: declaracoes')
+    while(var_type()):
+        consome(tt['id'])
+        consome(tt['~'])
 
 def var_type():
-	if (atualIgual(tokenAtual[0][1])) or (atualIgual(tokenAtual[0][1])):
-		consome()
-		return True
-	else:
-		return False
+    if (atualIgual(tt['queijo'])):
+        consome(tt['queijo'])
+        return True
+    elif (atualIgual(tt['pamonha'])):
+        consome(tt['pamonha'])
+        return True
+    return False
 
 def comandos():
-	if comentario: print('Atual: comandos')
-	if (atualIgual(tt['id']) or
-	    atualIgual(tt['caso']) or
-		atualIgual(tt['faiz']) or
-		atualIgual(tt['cata']) or
-		atualIgual(tt['bota'])):
-		comando()
-		comandos()
-	else:
-		pass
+    if comentario: print('Atual: comandos')
+    print("TOKEN ATUAL:", tokenAtual)
+    if (atualIgual(tt['id']) or
+        atualIgual(tt['caso']) or
+        atualIgual(tt['faiz']) or
+        atualIgual(tt['cata']) or
+        atualIgual(tt['bota'])):
+        comando()
+        comandos()
+    else:
+        pass
 
 def comando():
-	if atualIgual(tt['id']): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
-		atribuicao()
-	if atualIgual(tt['caso']):
-		caso()
-	if atualIgual(tt['faiz']):
-		faiz()
-	if atualIgual(tt['cata']):
-		cin()
-	if atualIgual(tt['bota']):
-		cout()
+    if atualIgual(tt['id']): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
+        atribuicao()
+    if atualIgual(tt['caso']):
+        caso()
+    if atualIgual(tt['faiz']):
+        faiz()
+    if atualIgual(tt['cata']):
+        cin()
+    if atualIgual(tt['bota']):
+        cout()
 
 def atribuicao():
-	consome(tt['id'])
-	if atualIgual(tt['atrib']):
-		consome(tt['atrib'])
-		conteudo()
-		endline()
-	else:
-		print("Esperava-se um <>")
+    consome(tt['id'])
+    if atualIgual(tt['<>']):
+        consome(tt['<>'])
+        conteudo()
+        endline()
+    else:
+        print("Esperava-se um <>")
 
 def endline():
-	if atualIgual(tt['endline']):
-		consome(tt['endline'])
-	else:
-		print("Esperava-se um ~")
+    if atualIgual(tt['~']):
+        consome(tt['~'])
+    else:
+        print("Esperava-se um ~")
 
 def conteudo():
-	terminal()
-	Elinha()
+    terminal()
+    Elinha()
 
 def terminal():
-	if atualIgual(tt['numero'], tt['id']): #verifico se é um terminal
-		consome()
-	else:
-		print("Esperava-se um valor")
+    if (atualIgual(tt['num'])):
+        consome(tt['num'])
+    elif (atualIgual(tt['id'])): #verifico se é um terminal
+        consome(tt['id'])
+    else:
+        print("Esperava-se um valor")
+        return False
+    return True
 
 def Elinha():
-	if atualIgual(tt['soma'], tt['sub'], tt['vezes'], tt['divisao']):
-		operador()
-		terminal()
-		Elinha()
-	else:
-		pass
+    if atualIgual(tt['soma'], tt['sub'], tt['vezes'], tt['divisao']):
+        operador()
+        terminal()
+        Elinha()
+    else:
+        pass
 
 def operador():
-	#if atualIgual(tt.soma): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
-	#	consome(tt.soma)
-	#if atualIgual(tt.sub):
-	#	consome(tt.sub)
-	#if atualIgual(tt.vezes):
-	#	consome(tt.vezes)
-	#if atualIgual(tt.divisao):
-	#	consome(tt.divisao)
-	consome()
+    #if atualIgual(tt.soma): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
+    #	consome(tt.soma)
+    #if atualIgual(tt.sub):
+    #	consome(tt.sub)
+    #if atualIgual(tt.vezes):
+    #	consome(tt.vezes)
+    #if atualIgual(tt.divisao):
+    #	consome(tt.divisao)
+    consome()
 
 def caso(): #corresponde ao se
-	if atualIgual(tt['caso']):
-		consome(tt['caso'])
-		expressao()
-		pipe()
-		comandos()
-		otoscaso()
-		pipe()
+    if atualIgual(tt['caso']):
+        consome(tt['caso'])
+        expressao()
+        pipe()
+        comandos()
+        otoscaso()
+        pipe()
 
 def otoscaso():
-	if atualIgual(tt['senao']):
-		consome(tt['senao'])
-		pipe()
-		comandos()
-		pipe()	
-	else: 
-		if atualIgual(tt['senaose']):
-			consome(tt['senaose'])
-			expressao()
-			pipe()
-			comandos()
-			pipe()
-			otoscaso()
-		else:
-			pass
+    if atualIgual(tt['otos-caso']):
+        consome(tt['otos-caso'])
+        pipe()
+        comandos()
+        pipe()	
+    else: 
+        if atualIgual(tt['otos-caso-se']):
+            consome(tt['otos-caso-se'])
+            expressao()
+            pipe()
+            comandos()
+            pipe()
+            otoscaso()
+        else:
+            pass
 
 def pipe():
-	if atualIgual(tt['pipe']):
-		consome(tt['pipe'])
-	else:
-		print("Esperava-se um |")
-
+    if atualIgual(tt['|']):
+        consome(tt['|'])
+    else:
+        print("Esperava-se um |")
 
 def expressao():
-	terminalLogico()
-	Llinha()
+    terminalLogico()
+    Llinha()
 
 def terminalLogico():
-	if atualIgual(tt['numero'], tt['id'], tt['verdadeiro'], tt['falso']): #verifico se é um terminal logico
-		consome()
-	else:
-		print("Esperava-se um símbolo lógico")
+    if (atualIgual(tt['num'])):
+        consome(tt['num'])
+    elif (atualIgual(tt['id'])):
+        consome(tt['id'])
+    elif (atualIgual(tt['trem-bao'])):
+        consome(tt['trem-baum'])
+    elif (atualIgual(tt['trem-ruim'])): #verifico se é um terminal logico
+        consome(tt['trem-ruim'])
+    else:
+        print("Esperava-se um símbolo lógico")
+        return False
+    return True
 
 def Llinha():
-	if (operadorLogico()):
-		terminal()
-		Llinha()
-	else:
-		pass
+    while (operadorLogico()):
+        terminal()
+        Llinha()
 
 def operadorLogico():
-	if atualIgual(tt['mema-coisa'], tt['diferente-de'], tt['maior-que'], tt['menor-que'], 
-			   tt['maior-que-ou-mema-coisa'], tt['menor-que-ou-mema-coisa'], tt['nao'], tt['e'], tt['ou']):
-		consome()
-		return True
-	else:
-		return False
+    if (atualIgual(tt['mema-coisa'])):
+        consome(tt['mema-coisa'])
+    elif (atualIgual(tt['diferente-de'])):
+        consome(tt['diferente-de'])
+    elif (atualIgual(tt['maior-que'])):
+        consome(tt['maior-que'])
+    elif (atualIgual(tt['menor-que'])):
+        consome(tt['menor-que'])
+    elif (atualIgual(tt['maior-que-ou-mema-coisa'])):
+        consome(tt['maior-que-ou-mema-coisa'])
+    elif (atualIgual(tt['menor-que-ou-mema-coisa'])):
+        consome(tt['menor-que-ou-mema-coisa'])
+    elif (atualIgual(tt['aneim'])):
+        consome(tt['aneim'])
+    elif (atualIgual(tt['e'])):
+        consome(tt['e'])
+    elif (atualIgual(tt['ou'])):
+        consome(tt['ou'])
+    else:
+        return False
+    return True
 
 def faiz():
-	if atualIgual(tt['faiz']):
-		consome(tt['faiz'])
-		expressao()
-		pipe()
-		comandos()
-		pipe()
+    if atualIgual(tt['faiz']):
+        consome(tt['faiz'])
+        expressao()
+        pipe()
+        comandos()
+        pipe()
 
 def cin():
-	if atualIgual(tt['cin']):
-		consome(tt['cin'])
-		id()
-		endline()
+    if atualIgual(tt['cata']):
+        consome(tt['cata'])
+        id()
+        endline()
 
 def id():
-	if atualIgual(tt['id']):
-		consome(tt['id'])
-	else:
-		print("Esperava-se um identificador")
+    if atualIgual(tt['id']):
+        consome(tt['id'])
+    else:
+        print("Esperava-se um identificador")
 
 def cout():
-	if atualIgual(tt['cout']):
-		consome(tt['cout'])
-		#???
-		
+    if atualIgual(tt['bota']):
+        consome(tt['bota'])
+        consome(tt['literal'])
+        consome(tt['~'])
+        
 def main():
     global tokenAtual
     tokenAtual = getToken(arquivo, linha)
