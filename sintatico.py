@@ -57,7 +57,6 @@ def var_type():
 
 def comandos():
     if comentario: print('Atual: comandos')
-    print("TOKEN ATUAL:", tokenAtual)
     if (atualIgual(tt['id']) or
         atualIgual(tt['caso']) or
         atualIgual(tt['faiz']) or
@@ -110,7 +109,23 @@ def terminal():
     return True
 
 def Elinha():
-    if atualIgual(tt['soma'], tt['sub'], tt['vezes'], tt['divisao']):
+    if atualIgual(tt['mais']):
+        consome(tt['mais'])
+        operador()
+        terminal()
+        Elinha()
+    elif atualIgual(tt['menos']):
+        consome(tt['menos'])
+        operador()
+        terminal()
+        Elinha()
+    elif atualIgual(tt['veiz']):
+        consome(tt['veiz'])
+        operador()
+        terminal()
+        Elinha()
+    elif atualIgual(tt['por']):
+        consome(tt['por'])
         operador()
         terminal()
         Elinha()
@@ -118,24 +133,24 @@ def Elinha():
         pass
 
 def operador():
-    #if atualIgual(tt.soma): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
-    #	consome(tt.soma)
-    #if atualIgual(tt.sub):
-    #	consome(tt.sub)
-    #if atualIgual(tt.vezes):
-    #	consome(tt.vezes)
-    #if atualIgual(tt.divisao):
-    #	consome(tt.divisao)
-    consome()
+    if atualIgual(tt['mais']): #id e não atribuição pq estamos falando do processo inteiro de atrib, não apenas o símbolo
+        consome(tt['mais'])
+    elif atualIgual(tt['menos']):
+        consome(tt['menos'])
+    elif atualIgual(tt['veiz']):
+        consome(tt['veiz'])
+    elif atualIgual(tt['por']):
+        consome(tt['por'])
 
 def caso(): #corresponde ao se
-    if atualIgual(tt['caso']):
-        consome(tt['caso'])
-        expressao()
-        pipe()
-        comandos()
-        otoscaso()
-        pipe()
+    consome(tt['caso'])
+    expressao()
+    pipe()
+    comandos()
+    pipe()
+    otoscaso()
+    print("AQUI NO CASO", tokenAtual)
+    pipe()
 
 def otoscaso():
     if atualIgual(tt['otos-caso']):
@@ -178,10 +193,21 @@ def terminalLogico():
         return False
     return True
 
+def Mlinha():
+    if (atualIgual(tt['e'])):
+        consome(tt['e'])
+    elif (atualIgual(tt['ou'])):
+        consome(tt['ou'])
+    else:
+        return False
+    return True   
+
 def Llinha():
     while (operadorLogico()):
         terminal()
         Llinha()
+        terminal()
+        Mlinha()
 
 def operadorLogico():
     if (atualIgual(tt['mema-coisa'])):
@@ -207,12 +233,15 @@ def operadorLogico():
     return True
 
 def faiz():
-    if atualIgual(tt['faiz']):
-        consome(tt['faiz'])
-        expressao()
-        pipe()
-        comandos()
-        pipe()
+    consome(tt['faiz'])
+    if (atualIgual(tt['id'])):
+        consome(tt['id'])
+    elif (atualIgual(tt['num'])):
+        consome(tt['num'])
+    consome(tt['veiz'])
+    pipe()
+    comandos()
+    pipe()
 
 def cin():
     if atualIgual(tt['cata']):
@@ -227,10 +256,9 @@ def id():
         print("Esperava-se um identificador")
 
 def cout():
-    if atualIgual(tt['bota']):
-        consome(tt['bota'])
-        consome(tt['literal'])
-        consome(tt['~'])
+    consome(tt['bota'])
+    consome(tt['literal'])
+    consome(tt['~'])
         
 def main():
     global tokenAtual
