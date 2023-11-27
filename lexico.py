@@ -12,7 +12,7 @@ tipo_token = {
     'casadinho': (6, 'bool'),
 	'otos-caso': (7, 'senao'),
 	'otos-caso-se': (8, 'senaose'),
-	'ate-que': (9, 'while'),
+	'rodada': (9, 'rodada'),
 	'bota': (10, 'cout'),
 	'caso': (11, 'caso'), # representa o IF
 	'faiz': (12, 'faiz'), #repreta o for
@@ -41,7 +41,7 @@ tipo_token = {
 	'literal': (35, 'literal'),
 	'end': (36, 'end'),
 	'erro': (37, 'erro'),
-	' ': (38, 'espaco'), 
+	' ': (38, 'espaco')
 }
 
 def getChar(buffer, arquivo, linha):
