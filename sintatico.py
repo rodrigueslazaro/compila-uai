@@ -13,25 +13,9 @@ linha = [0]
 endDeclaracoes = False
 
 arquivo = open("teste.uai", "r")
-def abrir_lexico(nomeArquivo):
-    if path.exists(nomeArquivo):
-        arquivo = open(nomeArquivo, "r")
-        buffer = ''
-        linha = 1
-    else:
-        print('ERRO: Arquivo "%s" inexistente.' % nomeArquivo)
-
 
 def atualIgual(token):
     return tokenAtual[0][1] == token[1]
-
-def interprete(nomeArquivo):
-    lex = abrir_lexico(nomeArquivo)
-    tokenAtual = getToken()
-
-    main()
-    consome( tt['end'] )
-    print('Atual: end')
 
 def consome(token):
     global tokenAtual
@@ -43,8 +27,8 @@ def consome(token):
 def declaracoes():
     if comentario: print('Atual: declaracoes')
     while(var_type()):
-        consome(tt['id'])
-        consome(tt['~'])
+        id()
+        endline()
 
 def var_type():
     if (atualIgual(tt['queijo'])):
@@ -101,8 +85,8 @@ def conteudo():
 def terminal():
     if (atualIgual(tt['num'])):
         consome(tt['num'])
-    elif (atualIgual(tt['id'])): #verifico se é um terminal
-        consome(tt['id'])
+    elif (atualIgual(tt['id'])): 
+        id()
     else:
         print("Esperava-se um valor")
         return False
@@ -118,18 +102,15 @@ def Elinha():
 def operador():
     if atualIgual(tt['mais']):
         consome(tt['mais'])
-        return True
     elif atualIgual(tt['menos']):
         consome(tt['menos'])
-        return True
     elif atualIgual(tt['veiz']):
         consome(tt['veiz'])
-        return True
     elif atualIgual(tt['por']):
         consome(tt['por'])
-        return True
     else:
         return False
+    return True
 
 def caso(): #corresponde ao se
     consome(tt['caso'])
@@ -170,7 +151,7 @@ def terminalLogico():
     if (atualIgual(tt['num'])):
         consome(tt['num'])
     elif (atualIgual(tt['id'])):
-        consome(tt['id'])
+        id()
     elif (atualIgual(tt['trem-bao'])):
         consome(tt['trem-baum'])
     elif (atualIgual(tt['trem-ruim'])): #verifico se é um terminal logico
@@ -180,21 +161,10 @@ def terminalLogico():
         return False
     return True
 
-def Mlinha():
-    if (atualIgual(tt['e'])):
-        consome(tt['e'])
-    elif (atualIgual(tt['ou'])):
-        consome(tt['ou'])
-    else:
-        return False
-    return True   
-
 def Llinha():
     if (operadorLogico()):
         terminal()
         Llinha()
-        #terminal()
-        #Mlinha()
     else:
         pass
 
@@ -224,7 +194,7 @@ def operadorLogico():
 def faiz():
     consome(tt['faiz'])
     if (atualIgual(tt['id'])):
-        consome(tt['id'])
+        id()
     elif (atualIgual(tt['num'])):
         consome(tt['num'])
     consome(tt['rodada'])
@@ -252,14 +222,20 @@ def cout():
         consome(tt['id'])
     consome(tt['~'])
         
+def uai():
+    if atualIgual(tt['uai']):
+        consome(tt['uai'])
+    else:
+        print("Esperava-se um 'uai', uai!")
+
 def main():
     global tokenAtual
     tokenAtual = getToken(arquivo, linha)
     if comentario: print('Atual: main')
-    consome(tt['uai']) #acho q tem q testar se tem o pipe para ser consumido
-    consome(tt['|'])
+    uai()
+    pipe()
     declaracoes()
     comandos()
-    consome(tt['|'])
+    pipe()
 
 main()
