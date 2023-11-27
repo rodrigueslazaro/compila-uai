@@ -161,10 +161,28 @@ def terminalLogico():
         return False
     return True
 
+def Mlinha():
+    if (operadorEOu()):
+        terminal()
+        Mlinha()
+        Llinha()
+    else:
+        pass
+
+def operadorEOu():
+    if (atualIgual(tt['e'])):
+        consome(tt['e'])
+    elif (atualIgual(tt['ou'])):
+        consome(tt['ou'])
+    else:
+        return False
+    return True   
+
 def Llinha():
     if (operadorLogico()):
         terminal()
         Llinha()
+        Mlinha()
     else:
         pass
 
