@@ -115,8 +115,6 @@ def operador():
 def caso(): #corresponde ao se
     consome(tt['caso'])
     expressao()
-    print("aquii: ", tokenAtual)
-    pipe()
     comandos()
     pipe()
     otoscaso()
@@ -163,12 +161,13 @@ def terminalLogico():
     return True
 
 def Mlinha():
-    if (operadorEOu()):
+    if (atualIgual(tt['|'])):
+        consome(tt['|'])
+    elif (operadorEOu()):
         terminal()
         Llinha()
         Mlinha()
     else:
-        #print('Esperava-se um Operador lógico')
         pass
 
 def operadorEOu():
@@ -177,7 +176,7 @@ def operadorEOu():
     elif (atualIgual(tt['ou'])):
         consome(tt['ou'])
     else:
-        #print('Esperava-se E ou OU')
+        print("Esperave-se um E ou OU")
         return False
     return True   
 
@@ -188,7 +187,7 @@ def Llinha():
             Mlinha()
             Llinha()
     else:
-        print('Esperava-se E ou OU')
+        #print('Esperava-se E ou OU')
         pass
 
 def operadorLogico():
